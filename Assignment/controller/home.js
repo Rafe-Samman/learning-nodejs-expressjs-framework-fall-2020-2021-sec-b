@@ -1459,8 +1459,7 @@ router.post('/manager/deleteCategory/:catId', (req, res)=>{
 		'id'		: req.params.catId,
 	}
 
-	//console.log(catName);
-
+	
 	userModel.deleteCategory(category,function(status){
 		if(status){
 			res.redirect('/home/manager/seeCategories');
@@ -1502,11 +1501,7 @@ router.post('/manager/systemLeave', (req, res)=>{
 	})
 })
 
-///home/manager/editCategory/
 
-////////////////////////<-------manager-------->////////////////////
-
-//////////////// seller////////////////////////
 
 router.get('/seller', (req, res)=>{
 	user ={
@@ -1540,7 +1535,7 @@ router.post('/seller/profile', (req, res)=>{
 	
 	if(req.body.password == req.body.repassword){
 		password = req.body.password
-		//console.log(req.body.firstName+' '+req.body.lastName);
+		
 	}else{
 		password = null;
 	}
