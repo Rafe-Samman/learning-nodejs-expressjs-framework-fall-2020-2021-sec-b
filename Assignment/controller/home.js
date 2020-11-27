@@ -2110,28 +2110,44 @@ router.get('/seller/customizeProducts', (req, res)=>{
 	});
 })
 
-router.get('/seller/editProduct/:productId', (req, res)=>{
-	user ={
-		userName : req.cookies['user']
+router.post('/seller/editProduct/:productId', (req, res)=>{
+
+	if(req.body.category != 'Select Category'){
+		product = {
+			'id'			:req.params.productId,
+			'productName'	: req.body.productName,
+			'description'   : req.body.description,
+			'category'		: req.body.category,
+			'expDate'		: req.body.expDate,
+			'quantity' 		: req.body.quantity,
+			'price' 		: req.body.price,
+			'imageURL' 		: req.files.productImage.name
+		}
+
+		console.log(req.files.productImage);
+
+		var file = req.files.productImage;
+
+	file.mv('./assets/img/'+file.name, function(error){
+		
+		if(error == null){
+			userModel.editProduct(product,function(status){
+				if(status){
+					res.redirect('/home/seller/customizeProducts');
+				}else{
+					res.redirect('/home/seller/editProduct/:productId');
+				}
+			})
+		}else{
+			res.redirect('/home/seller/addProduct/:productId');
+		}
+	});
+
+	}else{
+			res.redirect('/home/seller/addProduct');
 	}
-
-	productId = req.params.productId;
-
-	userModel.getAllcategories(function(result){
-		categories = result;
-    })
-
-	userModel.getProduct(productId , function(results){
-		product = results;
-		console.log(results[0].id);
-	})
-
-	userModel.getInformation(user, function(results){
-		res.render('user/seller/customizeProducts/editProduct', {layout : './layouts/seller-main', userInformation : results, categoryInformation : categories, productInformation : product});
-	  });
-
-	//res.render('user/manager/editProducts');
 })
+
 
 router.post('/seller/editProduct/:productId', (req, res)=>{
 
@@ -2258,6 +2274,29 @@ router.post('/seller/customizeFarmer/delete/:userName', (req, res)=>{
 			res.redirect('/home/seller/customizeFarmer/delete/'+user.userName+'');
 		}
 	})
+})
+
+router.get('/seller/viewProduct/:productId', (req, res)=>{
+	user ={
+		userName : req.cookies['user']
+	}
+
+	productId = req.params.productId;
+
+	userModel.getAllcategories(function(result){
+		categories = result;
+    })
+
+	userModel.getProduct(productId , function(results){
+		product = results;
+		console.log(results[0].id);
+	})
+
+	userModel.getInformation(user, function(results){
+		res.render('user/seller/customizeProducts/viewProduct', {layout : './layouts/seller-main', userInformation : results, categoryInformation : categories, productInformation : product});
+	  });
+
+	//res.render('user/manager/editProducts');
 })
 
 
