@@ -1563,16 +1563,14 @@ router.post('/seller/profile', (req, res)=>{
 			console.log('3');
 		}
 	
-	// userModel.getInformation(function(results){
-	// 	res.render('user/manager/profile', {userInformation : results});
-	//   });	
+		
 });
 
 router.get('/seller/seeFarmers', (req, res)=>{
 
 	userModel.getAllfarmers(function(results){
 		farmers = results;
-		//console.log(farmers);
+	
 	})
 	user ={
 		userName : req.cookies['user']
@@ -1581,7 +1579,7 @@ router.get('/seller/seeFarmers', (req, res)=>{
 	userModel.getInformation(user,function(results){
 		res.render('user/seller/seeUsers/seeFarmers', {layout : './layouts/seller-main',userInformation : results, farmerInformation : farmers});
 	  });
-	//res.render('user/manager/seeUsers/seeFarmers');
+
 })
 
 router.get('/seller/addFarmer', (req, res)=>{
